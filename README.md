@@ -2,6 +2,8 @@
 
 A collection of resource about engineering, devops etc.
 
+Official site: [blog.baishancloud.com/learn](https://blog.baishancloud.com/learn/)
+
 ## Code styles
 
 [General development guide](code-style/general)
