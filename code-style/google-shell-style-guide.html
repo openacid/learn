@@ -1,0 +1,1434 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>shell</title>
+        <style type="text/css" media="screen">
+body {
+  background-color: #fff;
+  color: #333;
+  font-family: sans-serif;
+  font-size: 10pt;
+  margin-right: 100px;
+  margin-left: 100px;
+}
+
+h1, h2, h3, h4, h5, h6, .toc_title {
+  color: #06c;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+h1 {
+  text-align: center;
+  font-size: 18pt;
+}
+
+h2, .toc_title {
+  font-weight: bold;
+  font-size: 12pt;
+  margin-left: -40px;
+}
+
+h3, h4, h5, h6 {
+  font-size: 10pt;
+  margin-left: -20px;
+}
+
+.toc_category, .toc_stylepoint {
+  font-size: 10pt;
+  padding-top: .3em;
+  padding-bottom: .3em;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td, th {
+  border: 1px solid #ccc;
+  padding: 2px 12px;
+  font-size: 10pt;
+}
+
+.toc td, .toc th {
+  border-width: 1px 5px;
+}
+
+code, samp, var {
+  color: #060;
+}
+
+pre {
+  font-size: 10pt;
+  display: block;
+  color: #060;
+  background-color: #f8fff8;
+  border-color: #f0fff0;
+  border-style: solid;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+  border-left-width: 5px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+pre.badcode {
+  color: #c00;
+  background-color: #fff8f8;
+  border-color: #fff0f0;
+}
+
+.showhide_button {
+  float: left;
+  cursor: pointer;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ddd #aaa #aaa #ddd;
+  padding: 0 3px 1px;
+  margin: 0 4px 8px 0;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+
+.link_button {
+  float: left;
+  display: none;
+  background-color: #f8f8ff;
+  border-color: #f0f0ff;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 75%;
+  margin-top: 0;
+  margin-left: -50px;
+  padding: 4px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+
+address {
+  text-align: right;
+}
+
+hr {
+  margin-top: 3.5em;
+  border-width: 1px;
+  color: #fff;
+}
+
+.stylepoint_section {
+  display: block;
+  margin-bottom: 1em;
+  color: #5588ff;
+  font-family: sans-serif;
+  font-size: 90%;
+  font-weight: bold;
+  margin-left: -2%;
+}
+
+.stylepoint_subsection {
+  color: #667799;
+  font-family: sans-serif;
+  font-size: 90%;
+  font-weight: bold;
+  margin-left: -1%;
+}
+
+.stylepoint_subsubsection {
+  color: #667799;
+  font-family: sans-serif;
+  font-size: 80%;
+  font-weight: bold;
+  margin-left: 0;
+}
+
+.revision {
+  text-align: right;
+}
+        </style>
+    </head>
+<body data-gr-c-s-loaded="true">
+<h1>Shell Style Guide</h1>
+
+<p align="right">
+
+Revision 1.26
+</p>
+
+
+<address>
+  Paul Armstrong<br>
+  Too many more to mention<br>
+</address>
+
+<div style="margin-left: 50%; font-size: 75%;">
+<p>
+        Each style point has a summary for which additional information is available
+        by toggling the accompanying arrow button that looks this way:
+        <span class="showhide_button" style="margin-left: 0; float: none">▽</span>.
+        You may toggle all summaries with the big arrow button:
+      </p>
+<div style=" font-size: larger; margin-left: +2em;">
+<span class="showhide_button" style="font-size: 180%; float: none" onclick="javascript:ShowHideAll()" name="show_hide_all_button" id="show_hide_all_button">▽</span>
+        Toggle all summaries
+      </div>
+</div>
+<div class="toc">
+<div class="toc_title">Table of Contents</div>
+<table>
+<tbody><tr valign="top" class="">
+<td><div class="toc_category"><a href="#Shell_Files_and_Interpreter_Invocation">Shell Files and Interpreter Invocation</a></div></td>
+<td><div class="toc_stylepoint">
+<span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#File_Extensions">File Extensions</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#SUID/SGID">SUID/SGID</a></span> </div></td>
+</tr>
+<tr valign="top" class="">
+<td><div class="toc_category"><a href="#Environment">Environment</a></div></td>
+<td><div class="toc_stylepoint">
+<span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#STDOUT_vs_STDERR">STDOUT vs STDERR</a></span> </div></td>
+</tr>
+<tr valign="top" class="">
+<td><div class="toc_category"><a href="#Comments">Comments</a></div></td>
+<td><div class="toc_stylepoint">
+<span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#File_Header">File Header</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Function_Comments">Function Comments</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Implementation_Comments">Implementation Comments</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#TODO_Comments">TODO Comments</a></span> </div></td>
+</tr>
+<tr valign="top" class="">
+<td><div class="toc_category"><a href="#Formatting">Formatting</a></div></td>
+<td><div class="toc_stylepoint">
+<span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Indentation">Indentation</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Line_Length_and_Long_Strings">Line Length and Long Strings</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Pipelines">Pipelines</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Loops">Loops</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Case_statement">Case statement</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Variable_expansion">Variable expansion</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Quoting">Quoting</a></span> </div></td>
+</tr>
+<tr valign="top" class="">
+<td><div class="toc_category"><a href="#Features_and_Bugs">Features and Bugs</a></div></td>
+<td><div class="toc_stylepoint">
+<span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Command_Substitution">Command Substitution</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Test,_%5B_and_%5B%5B">Test, [ and [[</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Testing_Strings">Testing Strings</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Wildcard_Expansion_of_Filenames">Wildcard Expansion of Filenames</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Eval">Eval</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Pipes_to_While">Pipes to While</a></span> </div></td>
+</tr>
+<tr valign="top" class="">
+<td><div class="toc_category"><a href="#Naming_Conventions">Naming Conventions</a></div></td>
+<td><div class="toc_stylepoint">
+<span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Function_Names">Function Names</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Variable_Names">Variable Names</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Constants_and_Environment_Variable_Names">Constants and Environment Variable Names</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Source_Filenames">Source Filenames</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Read-only_Variables">Read-only Variables</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Use_Local_Variables">Use Local Variables</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Function_Location">Function Location</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#main">main</a></span> </div></td>
+</tr>
+<tr valign="top" class="">
+<td><div class="toc_category"><a href="#Calling_Commands">Calling Commands</a></div></td>
+<td><div class="toc_stylepoint">
+<span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Checking_Return_Values">Checking Return Values</a></span> <span style="padding-right: 1em; white-space:nowrap;" class=""><a href="#Builtin_Commands_vs._External_Commands">Builtin Commands vs. External Commands</a></span> </div></td>
+</tr>
+<tr valign="top" class="">
+<td><div class="toc_category"><a href="#Conclusion">Conclusion</a></div></td>
+<td><div class="toc_stylepoint"></div></td>
+</tr>
+</tbody></table>
+</div>
+
+  <div class="">
+<h2 name="Background" id="Background">Background</h2>
+
+
+
+    <div class="">
+<h3><a name="Which_Shell_to_Use" id="Which_Shell_to_Use">Which Shell to Use</a></h3>
+<span class="link_button" id="link-Which_Shell_to_Use__button" name="link-Which_Shell_to_Use__button" style="display: inline;"><a href="?showone=Which_Shell_to_Use#Which_Shell_to_Use">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Which_Shell_to_Use')" name="Which_Shell_to_Use__button" id="Which_Shell_to_Use__button">▽</span>
+      <div style="display:inline;" class="">
+        <code>Bash</code> is the only shell scripting language permitted for
+        executables.
+      </div>
+      <div class=""><div class="stylepoint_body" name="Which_Shell_to_Use__body" id="Which_Shell_to_Use__body" style="display: inline;">
+        <p>
+          Executables must start with <code>#!/bin/bash</code> and a minimum
+          number of flags. Use <code>set</code> to set shell options so that
+          calling your script as <code>bash <i>&lt;script_name&gt;</i></code>
+          does not break its functionality.
+        </p>
+        <p>
+          Restricting all executable shell scripts to bash
+          gives us a consistent shell language that's installed on all our
+          machines.
+        </p>
+        <p>
+          The only exception to this is where you're forced to by whatever
+          you're coding for. One example of this is Solaris SVR4 packages which
+          require plain Bourne shell for any scripts.
+        </p>
+      </div></div>
+    </div>
+
+    <div class="">
+<h3><a name="When_to_use_Shell" id="When_to_use_Shell">When to use Shell</a></h3>
+<span class="link_button" id="link-When_to_use_Shell__button" name="link-When_to_use_Shell__button" style="display: inline;"><a href="?showone=When_to_use_Shell#When_to_use_Shell">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('When_to_use_Shell')" name="When_to_use_Shell__button" id="When_to_use_Shell__button">▽</span>
+      <div style="display:inline;" class="">
+        Shell should only be used for small utilities or simple wrapper
+        scripts.
+      </div>
+      <div class=""><div class="stylepoint_body" name="When_to_use_Shell__body" id="When_to_use_Shell__body" style="display: inline;">
+        <p>
+          While shell scripting isn't a development language, it is used for
+          writing various utility scripts throughout Google.  This
+          style guide is more a recognition of its use rather than
+          a suggestion that it be used for widespread deployment.
+        </p>
+        <p>
+          Some guidelines:
+          </p><ul>
+            <li>
+              If you're mostly calling other utilities and are doing relatively
+              little data manipulation, shell is an acceptable choice for the
+              task.
+            </li>
+            <li>
+              If performance matters, use something other than shell.
+            </li>
+            <li>
+              If you find you need to use arrays for anything more than
+              assignment of <code>${PIPESTATUS}</code>, you should use Python.
+            </li>
+            <li>
+              If you are writing a script that is more than 100 lines long, you
+              should probably be writing it in Python instead. Bear in mind
+              that scripts grow. Rewrite your script in another language
+              early to avoid a time-consuming rewrite at a later date.
+            </li>
+          </ul>
+        <p></p>
+      </div></div>
+    </div>
+  </div>
+
+
+
+<div class="">
+<h2 name="Shell_Files_and_Interpreter_Invocation" id="Shell_Files_and_Interpreter_Invocation">Shell Files and Interpreter Invocation</h2>
+
+  <div class="">
+<h3><a name="File_Extensions" id="File_Extensions">File Extensions</a></h3>
+<span class="link_button" id="link-File_Extensions__button" name="link-File_Extensions__button" style="display: inline;"><a href="?showone=File_Extensions#File_Extensions">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('File_Extensions')" name="File_Extensions__button" id="File_Extensions__button">▽</span>
+    <div style="display:inline;" class="">
+      Executables should have no extension (strongly preferred) or a
+      <code>.sh</code> extension.
+      Libraries must have a <code>.sh</code> extension and should not be
+      executable.
+    </div>
+    <div class=""><div class="stylepoint_body" name="File_Extensions__body" id="File_Extensions__body" style="display: inline;">
+      <p>
+        It is not necessary to know what language a program is written in when
+        executing it and shell doesn't require an extension so we prefer not to
+        use one for executables.
+      </p>
+      <p>
+        However, for libraries it's important to know what language it is and
+        sometimes there's a need to have similar libraries in different
+        languages. This allows library files with identical purposes but
+        different languages to be identically named except for the
+        language-specific suffix.
+      </p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="SUID/SGID" id="SUID/SGID">SUID/SGID</a></h3>
+<span class="link_button" id="link-SUID/SGID__button" name="link-SUID/SGID__button" style="display: inline;"><a href="?showone=SUID/SGID#SUID/SGID">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('SUID/SGID')" name="SUID/SGID__button" id="SUID/SGID__button">▽</span>
+    <div style="display:inline;" class="">
+      SUID and SGID are <em>forbidden</em> on shell scripts.
+    </div>
+    <div class=""><div class="stylepoint_body" name="SUID/SGID__body" id="SUID/SGID__body" style="display: inline;">
+      <p>
+        There are too many security issues with shell that make it nearly
+        impossible to secure sufficiently to allow SUID/SGID.  While bash does
+        make it difficult to run SUID, it's still possible on some platforms
+        which is why we're being explicit about banning it.
+      </p>
+      <p>
+        Use <code>sudo</code>  to provide elevated access if you need it.
+      </p>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="">
+<h2 name="Environment" id="Environment">Environment</h2>
+
+  <div class="">
+<h3><a name="STDOUT_vs_STDERR" id="STDOUT_vs_STDERR">STDOUT vs STDERR</a></h3>
+<span class="link_button" id="link-STDOUT_vs_STDERR__button" name="link-STDOUT_vs_STDERR__button" style="display: inline;"><a href="?showone=STDOUT_vs_STDERR#STDOUT_vs_STDERR">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('STDOUT_vs_STDERR')" name="STDOUT_vs_STDERR__button" id="STDOUT_vs_STDERR__button">▽</span>
+    <div style="display:inline;" class="">
+      All error messages should go to <code>STDERR</code>.
+    </div>
+    <div class=""><div class="stylepoint_body" name="STDOUT_vs_STDERR__body" id="STDOUT_vs_STDERR__body" style="display: inline;">
+      <p>
+        This makes it easier
+        to separate normal status from actual issues.
+      </p>
+      <p>
+        A function to print out error messages along with other status
+        information is recommended.
+        </p><div class=""><pre>err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" &gt;&amp;2
+}
+
+if ! do_something; then
+  err "Unable to do_something"
+  exit "${E_DID_NOTHING}"
+fi</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="">
+<h2 name="Comments" id="Comments">Comments</h2>
+
+  <div class="">
+<h3><a name="File_Header" id="File_Header">File Header</a></h3>
+<span class="link_button" id="link-File_Header__button" name="link-File_Header__button" style="display: inline;"><a href="?showone=File_Header#File_Header">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('File_Header')" name="File_Header__button" id="File_Header__button">▽</span>
+    <div style="display:inline;" class="">
+      Start each file with a description of its contents.
+    </div>
+    <div class=""><div class="stylepoint_body" name="File_Header__body" id="File_Header__body" style="display: inline;">
+      <p>
+        Every file must have a top-level comment including a brief overview of
+        its contents.
+        A
+        copyright notice
+        and author information are optional.
+      </p>
+      <p>
+        Example:
+        </p><div class=""><pre>#!/bin/bash
+#
+# Perform hot backups of Oracle databases.</pre></div>
+      <p></p>
+
+
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Function_Comments" id="Function_Comments">Function Comments</a></h3>
+<span class="link_button" id="link-Function_Comments__button" name="link-Function_Comments__button" style="display: inline;"><a href="?showone=Function_Comments#Function_Comments">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Function_Comments')" name="Function_Comments__button" id="Function_Comments__button">▽</span>
+    <div style="display:inline;" class="">
+      Any function that is not both obvious and short must be commented. Any
+      function in a library must be commented regardless of length or
+      complexity.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Function_Comments__body" id="Function_Comments__body" style="display: inline;">
+      <p>
+        It should be possible for someone else to learn how to use your
+        program or to use a function in your library by reading the comments
+        (and self-help, if provided) without reading the code.
+      </p>
+      <p>
+        All function comments should contain:
+        </p><ul>
+          <li>
+            Description of the function
+          </li>
+          <li>
+            Global variables used and modified
+          </li>
+          <li>
+            Arguments taken
+          </li>
+          <li>
+            Returned values other than the default exit status of the last
+            command run
+          </li>
+        </ul>
+      <p></p>
+      <p>
+        Example:
+        </p><div class=""><pre>#!/bin/bash
+#
+# Perform hot backups of Oracle databases.
+
+export PATH='/usr/xpg4/bin:/usr/bin:/opt/csw/bin:/opt/goog/bin'
+
+#######################################
+# Cleanup files from the backup dir
+# Globals:
+#   BACKUP_DIR
+#   ORACLE_SID
+# Arguments:
+#   None
+# Returns:
+#   None
+#######################################
+cleanup() {
+  ...
+}</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Implementation_Comments" id="Implementation_Comments">Implementation Comments</a></h3>
+<span class="link_button" id="link-Implementation_Comments__button" name="link-Implementation_Comments__button" style="display: inline;"><a href="?showone=Implementation_Comments#Implementation_Comments">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Implementation_Comments')" name="Implementation_Comments__button" id="Implementation_Comments__button">▽</span>
+    <div style="display:inline;" class="">
+      Comment tricky, non-obvious, interesting or important parts of your code.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Implementation_Comments__body" id="Implementation_Comments__body" style="display: inline;">
+      <p>
+        This follows general Google coding comment practice. Don't comment
+        everything.  If there's a complex algorithm or you're doing something
+        out of the ordinary, put a short comment in.
+      </p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="TODO_Comments" id="TODO_Comments">TODO Comments</a></h3>
+<span class="link_button" id="link-TODO_Comments__button" name="link-TODO_Comments__button" style="display: inline;"><a href="?showone=TODO_Comments#TODO_Comments">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('TODO_Comments')" name="TODO_Comments__button" id="TODO_Comments__button">▽</span>
+    <div style="display:inline;" class="">
+      Use TODO comments for code that is temporary, a short-term solution, or
+      good-enough but not perfect.
+    </div>
+    <div class=""><div class="stylepoint_body" name="TODO_Comments__body" id="TODO_Comments__body" style="display: inline;">
+      <p>
+        This matches the convention in the <a href="cppguide.xml?showone=TODO_Comments#TODO_Comments">C++
+          Guide</a>.
+      </p>
+      <p>
+         TODOs should include the string TODO in all caps, followed by your
+         username in parentheses. A colon is optional. It's preferable to put a
+         bug/ticket number next to the TODO item as well.
+      </p>
+      <p>
+        Examples:
+
+        </p><div class=""><pre># TODO(mrmonkey): Handle the unlikely edge cases (bug ####)</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="">
+<h2 name="Formatting" id="Formatting">Formatting</h2>
+  <p>
+    While you should follow the style that's already there for files that
+    you're modifying, the following are required for any new code.
+  </p>
+
+  <div class="">
+<h3><a name="Indentation" id="Indentation">Indentation</a></h3>
+<span class="link_button" id="link-Indentation__button" name="link-Indentation__button" style="display: inline;"><a href="?showone=Indentation#Indentation">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Indentation')" name="Indentation__button" id="Indentation__button">▽</span>
+    <div style="display:inline;" class="">
+      Indent 2 spaces. No tabs.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Indentation__body" id="Indentation__body" style="display: inline;">
+      <p>
+        Use blank lines between blocks to improve readability.  Indentation is
+        two spaces.  Whatever you do, don't use tabs.  For existing files, stay
+        faithful to the existing indentation.
+      </p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Line_Length_and_Long_Strings" id="Line_Length_and_Long_Strings">Line Length and Long Strings</a></h3>
+<span class="link_button" id="link-Line_Length_and_Long_Strings__button" name="link-Line_Length_and_Long_Strings__button" style="display: inline;"><a href="?showone=Line_Length_and_Long_Strings#Line_Length_and_Long_Strings">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Line_Length_and_Long_Strings')" name="Line_Length_and_Long_Strings__button" id="Line_Length_and_Long_Strings__button">▽</span>
+    <div style="display:inline;" class="">
+      Maximum line length is 80 characters.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Line_Length_and_Long_Strings__body" id="Line_Length_and_Long_Strings__body" style="display: inline;">
+      <p>
+        If you have to write strings that are longer than 80 characters, this
+        should be done with a here document or an embedded newline if possible.
+        Literal strings that have to be longer than 80 chars and can't sensibly
+        be split are ok, but it's strongly preferred to find a way to make it
+        shorter.
+      </p>
+      <p>
+        </p><div class=""><pre># DO use 'here document's
+cat &lt;&lt;END;
+I am an exceptionally long
+string.
+END
+
+# Embedded newlines are ok too
+long_string="I am an exceptionally
+  long string."</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Pipelines" id="Pipelines">Pipelines</a></h3>
+<span class="link_button" id="link-Pipelines__button" name="link-Pipelines__button" style="display: inline;"><a href="?showone=Pipelines#Pipelines">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Pipelines')" name="Pipelines__button" id="Pipelines__button">▽</span>
+    <div style="display:inline;" class="">
+      Pipelines should be split one per line if they don't all fit on one line.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Pipelines__body" id="Pipelines__body" style="display: inline;">
+      <p>
+        If a pipeline all fits on one line, it should be on one line.
+      </p>
+      <p>
+        If not, it should be split at one pipe segment per line with the pipe
+        on the newline and a 2 space indent for the next section of the pipe.
+        This applies to a chain of commands combined using '|' as well as to
+        logical compounds using '||' and '&amp;&amp;'.
+        </p><div class=""><pre># All fits on one line
+command1 | command2
+
+# Long commands
+command1 \
+  | command2 \
+  | command3 \
+  | command4</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Loops" id="Loops">Loops</a></h3>
+<span class="link_button" id="link-Loops__button" name="link-Loops__button" style="display: inline;"><a href="?showone=Loops#Loops">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Loops')" name="Loops__button" id="Loops__button">▽</span>
+    <div style="display:inline;" class="">
+      Put <code>; do</code> and <code>; then</code> on the same line as the
+      <code>while</code>, <code>for</code> or <code>if</code>.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Loops__body" id="Loops__body" style="display: inline;">
+      <p>
+        Loops in shell are a bit different, but we follow the same principles
+        as with braces when declaring functions. That is: <code>; then</code>
+        and <code>; do</code> should be on the same line as the if/for/while.
+        <code>else</code> should be on its own line and closing statements
+        should be on their own line vertically aligned with the opening
+        statement.
+      </p>
+      <p>
+        Example:
+        </p><div class=""><pre>for dir in ${dirs_to_cleanup}; do
+  if [[ -d "${dir}/${ORACLE_SID}" ]]; then
+    log_date "Cleaning up old files in ${dir}/${ORACLE_SID}"
+    rm "${dir}/${ORACLE_SID}/"*
+    if [[ "$?" -ne 0 ]]; then
+      error_message
+    fi
+  else
+    mkdir -p "${dir}/${ORACLE_SID}"
+    if [[ "$?" -ne 0 ]]; then
+      error_message
+    fi
+  fi
+done</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Case_statement" id="Case_statement">Case statement</a></h3>
+<span class="link_button" id="link-Case_statement__button" name="link-Case_statement__button" style="display: inline;"><a href="?showone=Case_statement#Case_statement">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Case_statement')" name="Case_statement__button" id="Case_statement__button">▽</span>
+    <div style="display:inline;" class="">
+      <ul>
+        <li>
+          Indent alternatives by 2 spaces.
+        </li>
+        <li>
+          A one-line alternative needs a space after the close parenthesis of
+          the pattern and before the <code>;;</code>.
+        </li>
+        <li>
+          Long or multi-command alternatives should be split over multiple
+          lines with the pattern, actions, and <code>;;</code> on separate
+          lines.
+        </li>
+      </ul>
+    </div>
+    <div class=""><div class="stylepoint_body" name="Case_statement__body" id="Case_statement__body" style="display: inline;">
+      <p>
+        The matching expressions are indented one level from the 'case' and
+        'esac'.  Multiline actions are indented another level.  In general,
+        there is no need to quote match expressions.  Pattern expressions
+        should not be preceded by an open parenthesis.  Avoid the
+        <code>;&amp;</code> and <code>;;&amp;</code> notations.
+      </p>
+      <div class=""><pre>case "${expression}" in
+  a)
+    variable="..."
+    some_command "${variable}" "${other_expr}" ...
+    ;;
+  absolute)
+    actions="relative"
+    another_command "${actions}" "${other_expr}" ...
+    ;;
+  *)
+    error "Unexpected expression '${expression}'"
+    ;;
+esac</pre></div>
+      <p>
+        Simple commands may be put on the same line as the pattern <i>and</i>
+        <code>;;</code> as long as the expression remains readable.  This is
+        often appropriate for single-letter option processing.  When the
+        actions don't fit on a single line, put the pattern on a line on its
+        own, then the actions, then <code>;;</code> also on a line of its own.
+        When on the same line as the actions, use a space after the close
+        parenthesis of the pattern and another before the <code>;;</code>.
+        </p>
+      <div class=""><pre>verbose='false'
+aflag=''
+bflag=''
+files=''
+while getopts 'abf:v' flag; do
+  case "${flag}" in
+    a) aflag='true' ;;
+    b) bflag='true' ;;
+    f) files="${OPTARG}" ;;
+    v) verbose='true' ;;
+    *) error "Unexpected option ${flag}" ;;
+  esac
+done</pre></div>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Variable_expansion" id="Variable_expansion">Variable expansion</a></h3>
+<span class="link_button" id="link-Variable_expansion__button" name="link-Variable_expansion__button" style="display: inline;"><a href="?showone=Variable_expansion#Variable_expansion">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Variable_expansion')" name="Variable_expansion__button" id="Variable_expansion__button">▽</span>
+    <div style="display:inline;" class="">
+      In order of precedence: Stay consistent with what you find;
+      quote your variables;
+      prefer "${var}" over "$var", but see details.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Variable_expansion__body" id="Variable_expansion__body" style="display: inline;">
+      <p>
+        These are meant to be guidelines, as the topic seems too controversial for
+        a mandatory regulation.
+        <br>
+        They are listed in order of precedence.
+      </p>
+      <ol>
+        <li>
+          Stay consistent with what you find for existing code.
+        </li>
+        <li>
+          Quote variables, see <a href="#Quoting">Quoting section below</a>.
+        </li>
+        <li>
+          <p>
+            Don't brace-quote single character shell
+            specials / positional parameters, unless strictly necessary
+            or avoiding deep confusion.
+            <br>
+            Prefer brace-quoting all other variables.
+            </p><div class=""><pre># Section of recommended cases.
+
+# Preferred style for 'special' variables:
+echo "Positional: $1" "$5" "$3"
+echo "Specials: !=$!, -=$-, _=$_. ?=$?, #=$# *=$* @=$@ \$=$$ ..."
+
+# Braces necessary:
+echo "many parameters: ${10}"
+
+# Braces avoiding confusion:
+# Output is "a0b0c0"
+set -- a b c
+echo "${1}0${2}0${3}0"
+
+# Preferred style for other variables:
+echo "PATH=${PATH}, PWD=${PWD}, mine=${some_var}"
+while read f; do
+  echo "file=${f}"
+done &lt; &lt;(ls -l /tmp)
+
+# Section of discouraged cases
+
+# Unquoted vars, unbraced vars, brace-quoted single letter
+# shell specials.
+echo a=$avar "b=$bvar" "PID=${$}" "${1}"
+
+# Confusing use: this is expanded as "${1}0${2}0${3}0",
+# not "${10}${20}${30}
+set -- a b c
+echo "$10$20$30"</pre></div>
+          <p></p>
+        </li>
+      </ol>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Quoting" id="Quoting">Quoting</a></h3>
+<span class="link_button" id="link-Quoting__button" name="link-Quoting__button" style="display: inline;"><a href="?showone=Quoting#Quoting">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Quoting')" name="Quoting__button" id="Quoting__button">▽</span>
+    <div style="display:inline;" class="">
+      <ul>
+        <li>
+          Always quote strings containing variables, command substitutions,
+          spaces or shell meta characters, unless careful unquoted expansion
+          is required.
+        </li>
+        <li>
+          Prefer quoting strings that are "words"
+          (as opposed to command options or path names).
+        </li>
+        <li>
+        Never quote <em>literal</em> integers.
+        </li>
+        <li>
+          Be aware of the quoting rules for
+          <a href="#Test,_%5B_and_%5B%5B">pattern matches in [[</a>.
+        </li>
+        <li>
+          Use "$@" unless you have a specific reason to use $*.
+        </li>
+      </ul>
+    </div>
+    <div class=""><div class="stylepoint_body" name="Quoting__body" id="Quoting__body" style="display: inline;">
+      <p>
+        </p><div class=""><pre># 'Single' quotes indicate that no substitution is desired.
+# "Double" quotes indicate that substitution is required/tolerated.
+
+# Simple examples
+# "quote command substitutions"
+flag="$(some_command and its args "$@" 'quoted separately')"
+
+# "quote variables"
+echo "${flag}"
+
+# "never quote literal integers"
+value=32
+# "quote command substitutions", even when you expect integers
+number="$(generate_number)"
+
+# "prefer quoting words", not compulsory
+readonly USE_INTEGER='true'
+
+# "quote shell meta characters"
+echo 'Hello stranger, and well met. Earn lots of $$$'
+echo "Process $$: Done making \$\$\$."
+
+# "command options or path names"
+# ($1 is assumed to contain a value here)
+grep -li Hugo /dev/null "$1"
+
+# Less simple examples
+# "quote variables, unless proven false": ccs might be empty
+git send-email --to "${reviewers}" ${ccs:+"--cc" "${ccs}"}
+
+# Positional parameter precautions: $1 might be unset
+# Single quotes leave regex as-is.
+grep -cP '([Ss]pecial|\|?characters*)$' ${1:+"$1"}
+
+# For passing on arguments,
+# "$@" is right almost everytime, and
+# $* is wrong almost everytime:
+#
+# * $* and $@ will split on spaces, clobbering up arguments
+#   that contain spaces and dropping empty strings;
+# * "$@" will retain arguments as-is, so no args
+#   provided will result in no args being passed on;
+#   This is in most cases what you want to use for passing
+#   on arguments.
+# * "$*" expands to one argument, with all args joined
+#   by (usually) spaces,
+#   so no args provided will result in one empty string
+#   being passed on.
+# (Consult 'man bash' for the nit-grits ;-)
+
+set -- 1 "2 two" "3 three tres"; echo $# ; set -- "$*"; echo "$#, $@")
+set -- 1 "2 two" "3 three tres"; echo $# ; set -- "$@"; echo "$#, $@")</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="">
+<h2 name="Features_and_Bugs" id="Features_and_Bugs">Features and Bugs</h2>
+
+  <div class="">
+<h3><a name="Command_Substitution" id="Command_Substitution">Command Substitution</a></h3>
+<span class="link_button" id="link-Command_Substitution__button" name="link-Command_Substitution__button" style="display: inline;"><a href="?showone=Command_Substitution#Command_Substitution">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Command_Substitution')" name="Command_Substitution__button" id="Command_Substitution__button">▽</span>
+    <div style="display:inline;" class="">
+      Use <code>$(command)</code> instead of backticks.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Command_Substitution__body" id="Command_Substitution__body" style="display: inline;">
+      <p>
+        Nested backticks require escaping the inner ones with <code>\</code>.
+        The <code>$(command)</code> format doesn't change when nested and is
+        easier to read.
+      </p>
+      <p>
+        Example:
+        </p><div class=""><pre># This is preferred:
+var="$(command "$(command1)")"
+
+# This is not:
+var="`command \`command1\``"</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Test,_%5B_and_%5B%5B" id="Test,_[_and_[[">Test, [ and [[</a></h3>
+<span class="link_button" id="link-Test,_[_and_[[__button" name="link-Test,_[_and_[[__button" style="display: inline;"><a href="?showone=Test,_%5B_and_%5B%5B#Test,_%5B_and_%5B%5B">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Test,_[_and_[[')" name="Test,_[_and_[[__button" id="Test,_[_and_[[__button">▽</span>
+    <div style="display:inline;" class="">
+      <code>[[ ... ]]</code> is preferred over <code>[</code>,
+      <code>test</code> and <code>/usr/bin/[</code>.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Test,_[_and_[[__body" id="Test,_[_and_[[__body" style="display: inline;">
+      <p>
+        <code>[[ ... ]]</code> reduces errors as no pathname expansion or word
+        splitting takes place between <code>[[</code> and <code>]]</code> and
+        <code>[[ ... ]]</code> allows for regular expression matching where
+        <code>[ ... ]</code> does not.
+        </p><div class=""><pre># This ensures the string on the left is made up of characters in the
+# alnum character class followed by the string name.
+# Note that the RHS should not be quoted here.
+# For the gory details, see
+# E14 at https://tiswww.case.edu/php/chet/bash/FAQ
+if [[ "filename" =~ ^[[:alnum:]]+name ]]; then
+  echo "Match"
+fi
+
+# This matches the exact pattern "f*" (Does not match in this case)
+if [[ "filename" == "f*" ]]; then
+  echo "Match"
+fi
+
+# This gives a "too many arguments" error as f* is expanded to the
+# contents of the current directory
+if [ "filename" == f* ]; then
+  echo "Match"
+fi</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Testing_Strings" id="Testing_Strings">Testing Strings</a></h3>
+<span class="link_button" id="link-Testing_Strings__button" name="link-Testing_Strings__button" style="display: inline;"><a href="?showone=Testing_Strings#Testing_Strings">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Testing_Strings')" name="Testing_Strings__button" id="Testing_Strings__button">▽</span>
+    <div style="display:inline;" class="">
+      Use quotes rather than filler characters where possible.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Testing_Strings__body" id="Testing_Strings__body" style="display: inline;">
+      <p>
+        Bash is smart enough to deal with an empty string in a test. So, given
+        that the code is much easier to read, use tests for empty/non-empty
+        strings or empty strings rather than filler characters.
+        </p><div class=""><pre># Do this:
+if [[ "${my_var}" = "some_string" ]]; then
+  do_something
+fi
+
+# -z (string length is zero) and -n (string length is not zero) are
+# preferred over testing for an empty string
+if [[ -z "${my_var}" ]]; then
+  do_something
+fi
+
+# This is OK (ensure quotes on the empty side), but not preferred:
+if [[ "${my_var}" = "" ]]; then
+  do_something
+fi
+
+# Not this:
+if [[ "${my_var}X" = "some_stringX" ]]; then
+  do_something
+fi</pre></div>
+      <p></p>
+      <p>
+        To avoid confusion about what you're testing for, explicitly use
+        <code>-z</code> or <code>-n</code>.
+        </p><div class=""><pre># Use this
+if [[ -n "${my_var}" ]]; then
+  do_something
+fi
+
+# Instead of this as errors can occur if ${my_var} expands to a test
+# flag
+if [[ "${my_var}" ]]; then
+  do_something
+fi</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Wildcard_Expansion_of_Filenames" id="Wildcard_Expansion_of_Filenames">Wildcard Expansion of Filenames</a></h3>
+<span class="link_button" id="link-Wildcard_Expansion_of_Filenames__button" name="link-Wildcard_Expansion_of_Filenames__button" style="display: inline;"><a href="?showone=Wildcard_Expansion_of_Filenames#Wildcard_Expansion_of_Filenames">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Wildcard_Expansion_of_Filenames')" name="Wildcard_Expansion_of_Filenames__button" id="Wildcard_Expansion_of_Filenames__button">▽</span>
+    <div style="display:inline;" class="">
+      Use an explicit path when doing wildcard expansion of filenames.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Wildcard_Expansion_of_Filenames__body" id="Wildcard_Expansion_of_Filenames__body" style="display: inline;">
+      <p>
+        As filenames can begin with a <code>-</code>, it's a lot safer to
+        expand wildcards with <code>./*</code> instead of <code>*</code>.
+        </p><div class=""><pre># Here's the contents of the directory:
+# -f  -r  somedir  somefile
+
+# This deletes almost everything in the directory by force
+psa@bilby$ rm -v *
+removed directory: `somedir'
+removed `somefile'
+
+# As opposed to:
+psa@bilby$ rm -v ./*
+removed `./-f'
+removed `./-r'
+rm: cannot remove `./somedir': Is a directory
+removed `./somefile'</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Eval" id="Eval">Eval</a></h3>
+<span class="link_button" id="link-Eval__button" name="link-Eval__button" style="display: inline;"><a href="?showone=Eval#Eval">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Eval')" name="Eval__button" id="Eval__button">▽</span>
+    <div style="display:inline;" class="">
+      <code>eval</code> should be avoided.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Eval__body" id="Eval__body" style="display: inline;">
+      <p>
+        Eval munges the input when used for assignment to variables and can set
+        variables without making it possible to check what those variables
+        were.
+        </p><div class=""><pre># What does this set?
+# Did it succeed? In part or whole?
+eval $(set_my_variables)
+
+# What happens if one of the returned values has a space in it?
+variable="$(eval some_function)"</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Pipes_to_While" id="Pipes_to_While">Pipes to While</a></h3>
+<span class="link_button" id="link-Pipes_to_While__button" name="link-Pipes_to_While__button" style="display: inline;"><a href="?showone=Pipes_to_While#Pipes_to_While">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Pipes_to_While')" name="Pipes_to_While__button" id="Pipes_to_While__button">▽</span>
+    <div style="display:inline;" class="">
+      Use process substitution or for loops in preference to piping to while.
+      Variables modified in a while loop do not propagate to the parent
+      because the loop's commands run in a subshell.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Pipes_to_While__body" id="Pipes_to_While__body" style="display: inline;">
+      <p>
+        The implicit subshell in a pipe to while can make it difficult to track
+        down bugs.
+        </p><div class=""><pre class="badcode">last_line='NULL'
+your_command | while read line; do
+  last_line="${line}"
+done
+
+# This will output 'NULL'
+echo "${last_line}"</pre></div>
+      <p></p>
+      <p>
+        Use a for loop if you are confident that the input will not contain
+        spaces or special characters (usually, this means not user input).
+        </p><div class=""><pre>total=0
+# Only do this if there are no spaces in return values.
+for value in $(command); do
+  total+="${value}"
+done</pre></div>
+      <p></p>
+      <p>
+        Using process substitution allows redirecting output but puts the
+        commands in an explicit subshell rather than the implicit subshell that
+        bash creates for the while loop.
+        </p><div class=""><pre>total=0
+last_file=
+while read count filename; do
+  total+="${count}"
+  last_file="${filename}"
+done &lt; &lt;(your_command | uniq -c)
+
+# This will output the second field of the last line of output from
+# the command.
+echo "Total = ${total}"
+echo "Last one = ${last_file}"</pre></div>
+      <p></p>
+      <p>
+        Use while loops where it is not necessary to pass complex results
+        to the parent shell - this is typically where some more complex
+        "parsing" is required. Beware that simple examples are probably
+        more easily done with a tool such as awk. This may also be useful
+        where you specifically don't want to change the parent scope variables.
+        </p><div class=""><pre># Trivial implementation of awk expression:
+#   awk '$3 == "nfs" { print $2 " maps to " $1 }' /proc/mounts
+cat /proc/mounts | while read src dest type opts rest; do
+  if [[ ${type} == "nfs" ]]; then
+    echo "NFS ${dest} maps to ${src}"
+  fi
+done</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="">
+<h2 name="Naming_Conventions" id="Naming_Conventions">Naming Conventions</h2>
+
+  <div class="">
+<h3><a name="Function_Names" id="Function_Names">Function Names</a></h3>
+<span class="link_button" id="link-Function_Names__button" name="link-Function_Names__button" style="display: inline;"><a href="?showone=Function_Names#Function_Names">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Function_Names')" name="Function_Names__button" id="Function_Names__button">▽</span>
+    <div style="display:inline;" class="">
+      Lower-case, with underscores to separate words. Separate libraries
+      with <code>::</code>. Parentheses are required after the function name.
+      The keyword <code>function</code> is optional, but must be used
+      consistently throughout a project.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Function_Names__body" id="Function_Names__body" style="display: inline;">
+      <p>
+        If you're writing single functions, use lowercase and separate words
+        with underscore. If you're writing a package, separate package names
+        with <code>::</code>. Braces must be on the same line as the function
+        name (as with other languages at Google) and no space between the
+        function name and the parenthesis.
+        </p><div class=""><pre># Single function
+my_func() {
+  ...
+}
+
+# Part of a package
+mypackage::my_func() {
+  ...
+}</pre></div>
+      <p></p>
+      <p>
+        The <code>function</code> keyword is extraneous when "()" is present
+        after the function name, but enhances quick identification of
+        functions.
+      </p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Variable_Names" id="Variable_Names">Variable Names</a></h3>
+<span class="link_button" id="link-Variable_Names__button" name="link-Variable_Names__button" style="display: inline;"><a href="?showone=Variable_Names#Variable_Names">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Variable_Names')" name="Variable_Names__button" id="Variable_Names__button">▽</span>
+    <div style="display:inline;" class="">
+      As for function names.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Variable_Names__body" id="Variable_Names__body" style="display: inline;">
+      <p>
+        Variables names for loops should be similarly named for any variable
+        you're looping through.
+        </p><div class=""><pre>for zone in ${zones}; do
+  something_with "${zone}"
+done</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Constants_and_Environment_Variable_Names" id="Constants_and_Environment_Variable_Names">Constants and Environment Variable Names</a></h3>
+<span class="link_button" id="link-Constants_and_Environment_Variable_Names__button" name="link-Constants_and_Environment_Variable_Names__button" style="display: inline;"><a href="?showone=Constants_and_Environment_Variable_Names#Constants_and_Environment_Variable_Names">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Constants_and_Environment_Variable_Names')" name="Constants_and_Environment_Variable_Names__button" id="Constants_and_Environment_Variable_Names__button">▽</span>
+    <div style="display:inline;" class="">
+      All caps, separated with underscores, declared at the top of the file.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Constants_and_Environment_Variable_Names__body" id="Constants_and_Environment_Variable_Names__body" style="display: inline;">
+      <p>
+        Constants and anything exported to the environment should be
+        capitalized.
+        </p><div class=""><pre># Constant
+readonly PATH_TO_FILES='/some/path'
+
+# Both constant and environment
+declare -xr ORACLE_SID='PROD'</pre></div>
+      <p></p>
+      <p>
+        Some things become constant at their first setting (for example, via
+        getopts). Thus, it's OK to set a constant in getopts or based on a
+        condition, but it should be made readonly immediately afterwards.
+        Note that <code>declare</code> doesn't operate on global variables
+        within functions, so <code>readonly</code> or <code>export</code> is
+        recommended instead.
+      </p>
+      <div class=""><pre>VERBOSE='false'
+while getopts 'v' flag; do
+  case "${flag}" in
+    v) VERBOSE='true' ;;
+  esac
+done
+readonly VERBOSE</pre></div>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Source_Filenames" id="Source_Filenames">Source Filenames</a></h3>
+<span class="link_button" id="link-Source_Filenames__button" name="link-Source_Filenames__button" style="display: inline;"><a href="?showone=Source_Filenames#Source_Filenames">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Source_Filenames')" name="Source_Filenames__button" id="Source_Filenames__button">▽</span>
+    <div style="display:inline;" class="">
+      Lowercase, with underscores to separate words if desired.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Source_Filenames__body" id="Source_Filenames__body" style="display: inline;">
+      <p>
+        This is for consistency with other code styles in Google:
+        <code>maketemplate</code> or <code>make_template</code> but not
+        <code>make-template</code>.
+      </p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Read-only_Variables" id="Read-only_Variables">Read-only Variables</a></h3>
+<span class="link_button" id="link-Read-only_Variables__button" name="link-Read-only_Variables__button" style="display: inline;"><a href="?showone=Read-only_Variables#Read-only_Variables">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Read-only_Variables')" name="Read-only_Variables__button" id="Read-only_Variables__button">▽</span>
+    <div style="display:inline;" class="">
+      Use <code>readonly</code> or <code>declare -r</code> to ensure they're
+      read only.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Read-only_Variables__body" id="Read-only_Variables__body" style="display: inline;">
+      <p>
+        As globals are widely used in shell, it's important to catch errors
+        when working with them.  When you declare a variable that is
+        meant to be read-only, make this explicit.
+        </p><div class=""><pre>zip_version="$(dpkg --status zip | grep Version: | cut -d ' ' -f 2)"
+if [[ -z "${zip_version}" ]]; then
+  error_message
+else
+  readonly zip_version
+fi</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Use_Local_Variables" id="Use_Local_Variables">Use Local Variables</a></h3>
+<span class="link_button" id="link-Use_Local_Variables__button" name="link-Use_Local_Variables__button" style="display: inline;"><a href="?showone=Use_Local_Variables#Use_Local_Variables">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Use_Local_Variables')" name="Use_Local_Variables__button" id="Use_Local_Variables__button">▽</span>
+    <div style="display:inline;" class="">
+      Declare function-specific variables with <code>local</code>. Declaration
+      and assignment should be on different lines.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Use_Local_Variables__body" id="Use_Local_Variables__body" style="display: inline;">
+      <p>
+        Ensure that local variables are only seen inside a function and its
+        children by using <code>local</code> when declaring them. This avoids
+        polluting the global name space and inadvertently setting variables
+        that may have significance outside the function.
+      </p>
+      <p>
+        Declaration and assignment must be separate statements when
+        the assignment value is provided by a command substitution; as
+        the 'local' builtin does not propagate the exit code from the
+        command substitution.
+        </p><div class=""><pre>my_func2() {
+  local name="$1"
+
+  # Separate lines for declaration and assignment:
+  local my_var
+  my_var="$(my_func)" || return
+
+  # DO NOT do this: $? contains the exit code of 'local', not my_func
+  local my_var="$(my_func)"
+  [[ $? -eq 0 ]] || return
+
+  ...
+}</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Function_Location" id="Function_Location">Function Location</a></h3>
+<span class="link_button" id="link-Function_Location__button" name="link-Function_Location__button" style="display: inline;"><a href="?showone=Function_Location#Function_Location">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Function_Location')" name="Function_Location__button" id="Function_Location__button">▽</span>
+    <div style="display:inline;" class="">
+      Put all functions together in the file just below constants. Don't hide
+      executable code between functions.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Function_Location__body" id="Function_Location__body" style="display: inline;">
+      <p>
+        If you've got functions, put them all together near the top of the
+        file. Only includes, <code>set</code> statements and setting constants
+        may be done before declaring functions.
+      </p>
+      <p>
+        Don't hide executable code between functions. Doing so makes the code
+        difficult to follow and results in nasty surprises when debugging.
+      </p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="main" id="main">main</a></h3>
+<span class="link_button" id="link-main__button" name="link-main__button" style="display: inline;"><a href="?showone=main#main">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('main')" name="main__button" id="main__button">▽</span>
+    <div style="display:inline;" class="">
+      A function called <code>main</code> is required for scripts long enough
+      to contain at least one other function.
+    </div>
+    <div class=""><div class="stylepoint_body" name="main__body" id="main__body" style="display: inline;">
+      <p>
+        In order to easily find the start of the program, put the main
+        program in a function called <code>main</code> as the bottom most
+        function. This provides consistency with the rest of the code base as
+        well as allowing you to define more variables as <code>local</code>
+        (which can't be done if the main code is not a function). The last
+        non-comment line in the file should be a call to <code>main</code>:
+        </p><div class=""><pre>main "$@"</pre></div>
+      <p></p>
+      <p>
+        Obviously, for short scripts where it's just a linear flow,
+        <code>main</code> is overkill and so is not required.
+      </p>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="">
+<h2 name="Calling_Commands" id="Calling_Commands">Calling Commands</h2>
+
+  <div class="">
+<h3><a name="Checking_Return_Values" id="Checking_Return_Values">Checking Return Values</a></h3>
+<span class="link_button" id="link-Checking_Return_Values__button" name="link-Checking_Return_Values__button" style="display: inline;"><a href="?showone=Checking_Return_Values#Checking_Return_Values">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Checking_Return_Values')" name="Checking_Return_Values__button" id="Checking_Return_Values__button">▽</span>
+    <div style="display:inline;" class="">
+      Always check return values and give informative return values.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Checking_Return_Values__body" id="Checking_Return_Values__body" style="display: inline;">
+      <p>
+        For unpiped commands, use <code>$?</code> or check directly via an
+        <code>if</code> statement to keep it simple.
+      </p>
+      <p>
+        Example:
+        </p><div class=""><pre>if ! mv "${file_list}" "${dest_dir}/" ; then
+  echo "Unable to move ${file_list} to ${dest_dir}" &gt;&amp;2
+  exit "${E_BAD_MOVE}"
+fi
+
+# Or
+mv "${file_list}" "${dest_dir}/"
+if [[ "$?" -ne 0 ]]; then
+  echo "Unable to move ${file_list} to ${dest_dir}" &gt;&amp;2
+  exit "${E_BAD_MOVE}"
+fi</pre></div>
+      <p></p>
+      <p>
+        Bash also has the <code>PIPESTATUS</code> variable that allows checking
+        of the return code from all parts of a pipe. If it's only necessary to
+        check success or failure of the whole pipe, then the following is
+        acceptable:
+        </p><div class=""><pre>tar -cf - ./* | ( cd "${dir}" &amp;&amp; tar -xf - )
+if [[ "${PIPESTATUS[0]}" -ne 0 || "${PIPESTATUS[1]}" -ne 0 ]]; then
+  echo "Unable to tar files to ${dir}" &gt;&amp;2
+fi</pre></div>
+      <p></p>
+      <p>
+        However, as <code>PIPESTATUS</code> will be overwritten as soon as you
+        do any other command, if you need to act differently on errors based on
+        where it happened in the pipe, you'll need to assign
+        <code>PIPESTATUS</code> to another variable immediately after running
+        the command (don't forget that <code>[</code> is a command and will
+        wipe out <code>PIPESTATUS</code>).
+        </p><div class=""><pre>tar -cf - ./* | ( cd "${DIR}" &amp;&amp; tar -xf - )
+return_codes=(${PIPESTATUS[*]})
+if [[ "${return_codes[0]}" -ne 0 ]]; then
+  do_something
+fi
+if [[ "${return_codes[1]}" -ne 0 ]]; then
+  do_something_else
+fi</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+  <div class="">
+<h3><a name="Builtin_Commands_vs._External_Commands" id="Builtin_Commands_vs._External_Commands">Builtin Commands vs. External Commands</a></h3>
+<span class="link_button" id="link-Builtin_Commands_vs._External_Commands__button" name="link-Builtin_Commands_vs._External_Commands__button" style="display: inline;"><a href="?showone=Builtin_Commands_vs._External_Commands#Builtin_Commands_vs._External_Commands">
+          link
+        </a></span><span class="showhide_button" onclick="javascript:ShowHideByName('Builtin_Commands_vs._External_Commands')" name="Builtin_Commands_vs._External_Commands__button" id="Builtin_Commands_vs._External_Commands__button">▽</span>
+    <div style="display:inline;" class="">
+      Given the choice between invoking a shell builtin and invoking a separate
+      process, choose the builtin.
+    </div>
+    <div class=""><div class="stylepoint_body" name="Builtin_Commands_vs._External_Commands__body" id="Builtin_Commands_vs._External_Commands__body" style="display: inline;">
+      <p>
+        We prefer the use of builtins such as the <em>Parameter Expansion</em>
+        functions in <code>bash(1)</code> as it's more robust and portable
+        (especially when compared to things like sed).
+      </p>
+      <p>
+        Example:
+        </p><div class=""><pre># Prefer this:
+addition=$((${X} + ${Y}))
+substitution="${string/#foo/bar}"
+
+# Instead of this:
+addition="$(expr ${X} + ${Y})"
+substitution="$(echo "${string}" | sed -e 's/^foo/bar/')"</pre></div>
+      <p></p>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="">
+<h2 name="Conclusion" id="Conclusion">Conclusion</h2>
+  <p>
+    Use common sense and <em>BE CONSISTENT</em>.
+  </p>
+  <p>
+    Please take a few minutes to read the Parting Words section at the bottom
+    of the <a href="cppguide.html">C++ Guide</a>.
+  </p>
+</div>
+
+<p align="right">
+Revision 1.26
+</p>
+
+
+</body>
+</html>
