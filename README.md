@@ -10,7 +10,7 @@ A collection of resource about engineering, devops etc.
 
 -   [Python code style](code-style/python) based on [Google python style guide](code-style/google-python-style-guide)
 
--   [Google shell style guide](code-style/google-shell-style-guide)
+-   [Shell style guide by google](code-style/google-shell-style-guide)
 
 ##  Git
 
