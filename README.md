@@ -14,6 +14,8 @@ Official site: [openacid.github.io/learn](https://openacid.github.io/learn/)
 
 -   [Shell style guide by google](code-style/google-shell-style-guide)
 
+-   [Goland style](code-style/go)
+
 ##  Git
 
 -   [Git usage guide](dev/git-guide)
