@@ -40,6 +40,7 @@ class Acceptor(object):
         self.max_n = 0
         self.accept_n = 0
         self.accept_v = None
+        self.lock = threading.RLock()
 
     def run(self):
         while True:
@@ -53,28 +54,32 @@ class Acceptor(object):
 
     def prepare(self, msg):
         response = {'type': 'prepare'}
-        if self.max_n >= msg['n']:
-            response['pok'] = False
 
-        else:
-            self.max_n = msg['n']
-            response['pok'] = True
-            response['accept_n'] = self.accept_n
-            response['accpet_v'] = self.accept_v
+        with self.lock:
+            if self.max_n >= msg['n']:
+                response['ok'] = False
+
+            else:
+                self.max_n = msg['n']
+                response['ok'] = True
+                response['accept_n'] = self.accept_n
+                response['accept_v'] = self.accept_v
 
         msg['a2p'].put(response)
 
     def accept(self, msg):
         response = {'type': 'accept'}
-        if self.max_n > msg['n']:
-            response['pok'] = False
 
-        else:
-            self.accept_n = msg['n']
-            self.accept_v = msg['value']
-            self.max_n = msg['n']
+        with self.lock:
+            if self.max_n > msg['n']:
+                response['ok'] = False
 
-            response['pok'] = True
+            else:
+                self.accept_n = msg['n']
+                self.accept_v = msg['value']
+                self.max_n = msg['n']
+
+                response['ok'] = True
 
         msg['a2p'].put(response)
 
@@ -110,24 +115,24 @@ class Proposer(object):
 
             acp.p2a.put(msg)
 
-        pok_count = 0
+        ok_count = 0
         value = self.value
-        max_n = self.n
+        max_n = 0
         for _ in self.acceptors:
             try:
                 res = self.a2p.get(timeout=0.1)
             except Queue.Empty:
                 continue
 
-            if not res['pok'] or res['type'] != 'prepare' or self.lost():
+            if not res['ok'] or res['type'] != 'prepare' or self.lost():
                 continue
 
-            pok_count += 1
+            ok_count += 1
             if res['accept_n'] > max_n:
                 max_n = res['accept_n']
                 value = res['accept_v']
 
-        if pok_count < self.quorum:
+        if ok_count < self.quorum:
             raise AcceptNotEnough
 
         return value
@@ -140,19 +145,19 @@ class Proposer(object):
 
             acp.p2a.put(msg)
 
-        pok_count = 0
+        ok_count = 0
         for _ in self.acceptors:
             try:
                 res = self.a2p.get(timeout=0.1)
             except Queue.Empty:
                 continue
 
-            if not res['pok'] or res['type'] != 'accept' or self.lost():
+            if not res['ok'] or res['type'] != 'accept' or self.lost():
                 continue
 
-            pok_count += 1
+            ok_count += 1
 
-        if pok_count < self.quorum:
+        if ok_count < self.quorum:
             raise AcceptNotEnough
 
     def lost(self):
