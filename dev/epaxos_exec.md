@@ -44,8 +44,8 @@ instance2<----------instance4---------->instance6
 -----------
 ```
 
--   搜索到`instance6`发现没有边可搜索，这个时候退栈发现`DFN:4==LOW:4`且`instance5`没有可搜索边，
-    说明`instance6`是一个强连通分量，这个时候去`execution instance6`
+-   搜索到`instance6`发现没有边可搜索，这个时候退栈发现`DFN:4==LOW:4`，说明`instance6`是一个强连通分量，这个时候去
+    `execution instance6`
 
 -   同理`instance5`也是一个强连通分量，执行完`instance6`去执行`instance5`，这个时候栈如下
 
