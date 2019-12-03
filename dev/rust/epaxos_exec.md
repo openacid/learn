@@ -74,8 +74,21 @@ instance2<----------instance4---------->instance6
 -----------
 ```
 
--   这个时候，所有`instance`已经搜索完成，开始出栈，直到找到DFN[idx]=LOW[idx]，也就是强连通分量的根，这里就是`instance1`，
-    栈里面的元素集合就是一个强连通分量，这里是`instance1 instance2 instance3 instance4`
+-   这个时候，所有`instance`已经搜索完成，开始出栈，出栈会修改LOW的值，取看到的最小值，直到找到DFN[idx]=LOW[idx]，
+    也就是强连通分量的根，这里就是`instance1`，栈里面的元素集合就是一个强连通分量，这里是
+    `instance1 instance2 instance3 instance4`，LOW修改后如下
+
+```
+-----------
+|instance2|->DFN:6 LOW:1
+-----------
+|instance4|->DFN:5 LOW:1
+-----------
+|instance3|->DFN:2 LOW:1
+-----------
+|instance1|->DFN:1 LOW:1
+-----------
+```
 
 -   每个`instance`有一个`seq`，通过它对强连通分量里面的`instance`进行排序，按照这个顺序去执行这个`instance`
 
