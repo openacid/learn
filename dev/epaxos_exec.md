@@ -1,103 +1,122 @@
-#   instance
+#   Instance
 
--   每个`instance`需要保存它所依赖其它`Replica`上的那个`instance`
+这里仅列出`execution`需要用到的变量
 
--   比如三个`Replica`, 每个`instance`定义一个数组`Deps[3]`
+```go
+type Instance struct {
+    Deps    [ReplicaCount]int32
+    Index   int
+    Lowlink int
+    Seq     int
+}
+```
 
--   `Dep[0]`表示依赖`Replica 0`上的的`instance`
+-   `Deps`：表示当前`instance`所依赖的其它`Replica`上的`instance id`
 
--   `Dep[1]`表示依赖`Replica 1`上的的`instance`
+    -   `Deps[0]`表示依赖`Replica 0`上的的`instance id`
 
--   `Dep[2]`表示依赖`Replica 2`上的的`instance`
+    -   `Deps[1]`表示依赖`Replica 1`上的的`instance id`
 
+    -   `Deps[2]`表示依赖`Replica 2`上的的`instance id`
+
+-   `Index`：用于使用`Tarjan`算法寻找强连通分量的节点搜索次序编号，`=0`表示此节点没有被访问过
+
+-   `Lowlink`：`Tarjan`算法中节点或节点的子树能够追溯到的最早的栈中节点的次序号
+
+-   `Seq`：用于强连通分量定序
 
 #   看下执行过程
 
-例如下面是一个instance的依赖图
+例如下面是一个`ins`的依赖图
 
 ```
-instance1---------->instance3---------->instance5
-    ^                   |                   |
-    |                   |                   |
-    |                   |                   |
-    |                   |                   |
-    |                   V                   V
-instance2<----------instance4---------->instance6
+ins1---------->ins3---------->ins5
+ ^              |              |
+ |              |              |
+ |              |              |
+ |              |              |
+ |              V              V
+ins2<----------ins4---------->ins6
 ```
 
-实际上执行的过程就是有向图强连通分量的`Tarjan`算法
+采用`Tarjan`算法搜索图中的强连通分量`SCC:Strongly Connected Components`，该算法有两个重要的数组
 
--   `Tarjan`需要用到两个数组，`DFN[u]`为节点u搜索的次序编号，`LOW(u)`为u或u的子树能够追溯到的最早的栈中节点的次序号
+-   DFN[]：全称`Depth First Number`，表示节点被搜索到的次序编号，对应`struct Instance`中`Index`
 
--   从instance1开始dfs遍历, 比如顺序是`instance1->instance3->instance5->instance6`，保存到栈中, 源代码里面每个`instance`
-    定义了两个变量`Index`(=0表示这个节点没有被访问过)，`LowLink`，这里对应下面的`DFN`和`LOW`
+-   LOW[]：表示节点或者节点的子树能够追溯到的最早的栈中节点的次序编号，对应`struct Instance`中`Lowlink`
 
-```
------------
-|instance6|->DFN:4 LOW:4
------------
-|instance5|->DFN:3 LOW:3
------------
-|instance3|->DFN:2 LOW:2
------------
-|instance1|->DFN:1 LOW:1
------------
-```
+下面来展示一下执行过程，这里使用`DFN`(`struct Instance`中`Index`)，`LOW`(`struct Instance`中`Lowlink`)
 
--   搜索到`instance6`发现没有边可搜索，这个时候退栈发现`DFN:4==LOW:4`，说明`instance6`是一个强连通分量，这个时候去
-    `execution instance6`
-
--   同理`instance5`也是一个强连通分量，执行完`instance6`去执行`instance5`，这个时候栈如下
+-   从`ins1`开始`DFS`(`Depth First Search`)遍历, 比如顺序是`ins1->ins3->ins5->ins6`，依次入栈，如下
 
 ```
 -----------
-|instance3|->DFN:2 LOW:2
+|  ins6   |->DFN:4 LOW:4
 -----------
-|instance1|->DFN:1 LOW:1
+|  ins5   |->DFN:3 LOW:3
 -----------
-```
-
--   退栈到`instance3`，继续搜索`instance4`并加入栈
-
--   继续搜索`instance2`，由于`instance2`有边指向`instance1`，`instance1`还在栈里面，这个时候`instance2`的`LOW`取`instance1`
-    的`LOW`，也就是1，栈如下
-
-```
+|  ins3   |->DFN:2 LOW:2
 -----------
-|instance2|->DFN:6 LOW:1
------------
-|instance4|->DFN:5 LOW:5
------------
-|instance3|->DFN:2 LOW:2
------------
-|instance1|->DFN:1 LOW:1
+|  ins1   |->DFN:1 LOW:1
 -----------
 ```
 
--   这个时候，所有`instance`已经搜索完成，开始出栈，出栈会修改`LOW`的值，取看到的最小值，如下
+-   搜索到`ins6`发现没有边可搜索，这个时候退栈发现`DFN:4==LOW:4`，说明`ins6`是一个强连通分量，这个时候去`exec ins6`
+
+-   同理`ins5`也是一个强连通分量，`exec ins5`之后，这个时候栈如下
 
 ```
 -----------
-|instance2|->DFN:6 LOW:1
+|  ins3   |->DFN:2 LOW:2
 -----------
-|instance4|->DFN:5 LOW:1
------------
-|instance3|->DFN:2 LOW:1
------------
-|instance1|->DFN:1 LOW:1
+|  ins1   |->DFN:1 LOW:1
 -----------
 ```
 
--   找到一个`DFN[idx]=LOW[idx]`，也就是强连通分量的根，这里就是`instance1`，栈里面的元素集合就是一个强连通分量，这里是
-    `instance1 instance2 instance3 instance4`
+-   出栈到`ins3`，继续搜索`ins4`并加入栈
 
--   每个`instance`有一个`seq`，通过它对强连通分量里面的`instance`进行排序，按照这个顺序去执行这个`instance`
+-   继续搜索`ins2`，由于`ins2`有边指向`ins1`，`ins1`还在栈里面，这个时候`ins2`的`LOW`取`ins1`的`LOW`，也就是`1`，栈如下
+
+```
+-----------
+|  ins2   |->DFN:6 LOW:1
+-----------
+|  ins4   |->DFN:5 LOW:5
+-----------
+|  ins3   |->DFN:2 LOW:2
+-----------
+|  ins1   |->DFN:1 LOW:1
+-----------
+```
+
+-   这个时候，所有节点已经搜索完成，开始出栈，出栈会修改`LOW`的值，取看到的最小值，如下
+
+```
+-----------
+|  ins2   |->DFN:6 LOW:1
+-----------
+|  ins4   |->DFN:5 LOW:1
+-----------
+|  ins3   |->DFN:2 LOW:1
+-----------
+|  ins1   |->DFN:1 LOW:1
+-----------
+```
+
+-   我们需要找到一个节点`DFN=LOW`，也就是这个强连通分量的根，上述例子中就是`ins1`，栈里面的元素集合就是一个强连通分量，这里是
+    `ins1 ins2 ins3 ins4`
+
+#   强连通分量定序
+
+-   强连通分量中节点是相互可达的，也就是相互依赖，但是我们需要保证强连通分量中的`ins`执行顺序在每个`Replica`中保持一致，采用的
+    方式是通过`ins`中`Seq`进行排序，排序的结果也就是`ins`的执行顺序
 
 #   其它实现细节
 
--   比如`instance1(Replica1)---->instance10(Replica2)`，每个`Replica`保存了其`execution`后最大的`instance id`，这个时候
-    执行`instance10`需要把小于等于这个`instance id`的其它`instance`执行。也可以这样理解，`instance1(Replica1)`依赖`Replica2`
-    上`instanceid <= 10`的所有`instance`
+-   每个`Replica`保存了其`execution`后最大的`ins id`，定义为`ExecedUpTo`
 
--   `execution`线程会给当前`Replica`上最小的没有`committed`的`active instance`设置一个超时时间，到达超时时间还没有达到
-    `committed`状态，会触发`instance`的恢复流程
+-   比如`ins1(Replica1)->ins10(Replica2)`，实际上`Replica2`需要`exec`的是`[ExecedUpTo+1, ins10]`，也可以这样理解
+    `ins1(Replica1)`依赖`Replica2`上`ins id`在`[ExecedUpTo+1, ins10]`中的所有`ins`
+
+-   `execution`线程会给当前`Replica`上最小的没有`committed`的`active ins`设置一个超时时间，到达超时时间还没有达到
+    `committed`状态，会触发`ins`的恢复流程
