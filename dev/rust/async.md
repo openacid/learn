@@ -105,7 +105,7 @@ where
     unsafe { println!("new event: {:?}!!", *(ptr as *const Condevt)) };
 
     // Create a waker and task context.
-    let waker = unsafe { Waker::from_raw(RawWaker::new(ptr, &VTABLE)) };
+    let waker = unsafe { ManuallyDrop::new(Waker::from_raw(RawWaker::new(ptr, &VTABLE))) };
     let cx = &mut Context::from_waker(&waker);
 
     let mut future = future;
@@ -128,7 +128,8 @@ where
 
 -   创建一个条件变量，转化为指针传递给上面的四个函数指针，因为内存是这里申请的，所以上面的函数使用的时候要禁止释放内存
 
--   创建一个`Waker`，然后创建用于上下文切换的`Context`
+-   创建一个`Waker`，然后创建用于上下文切换的`Context`，该`Waker`生命周期结束会自动释放掉`ptr`，这里我们不需要释放，
+    使用`ManuallyDrop`限制下，因为`Arc`会自动释放掉申请的内存
 
 -   `let mut future = future`本地栈变量进行覆盖，转化为`mut`类型，由于`Future.poll`第一个参数是`Pin`类型，
     所以这里需要转化为`Pin`类型，这里不解释`Pin`类型的作用
@@ -240,7 +241,7 @@ where
     unsafe { println!("new event: {:?}!!", *(ptr as *const Condevt)) };
 
     // Create a waker and task context.
-    let waker = unsafe { Waker::from_raw(RawWaker::new(ptr, &VTABLE)) };
+    let waker = unsafe { ManuallyDrop::new(Waker::from_raw(RawWaker::new(ptr, &VTABLE))) };
     let cx = &mut Context::from_waker(&waker);
 
     let mut future = future;

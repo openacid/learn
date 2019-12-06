@@ -139,6 +139,54 @@ rust提供了两个`trait`，分别是`Send`，`Sync`:
 
 -   **Sync**：表示使用不可变引用在线程间传递
 
+标准库为所有类型实现了`Send`和`Sync`
+
+```
+unsafe impl Send for .. {}
+impl<T: ?Sized> !Send for *const T {}
+impl<T: ?Sized> !Send for *mut T {}
+```
+
+-   `for ..` 是一种特殊语法，表示为所有类型实现`Send`，`Sync`同理
+
+-   接着为两个指针类型实现了`!Send`，表示他们不是线程安全的，不能线程间传递
+
+来看另外一个类型`std::rc::Rc`
+
+```
+impl<T: ?Sized> !marker::Send for Rc<T> {}
+impl<T: ?Sized> !marker::Sync for Rc<T> {}
+```
+
+如果我们在线程间传递这种类型会怎么样，看下面这个例子
+
+```
+use std::thread;
+use std::rc::Rc;
+
+fn main() {
+    let x = Rc::new(vec![1, 2, 3, 4]);
+    thread::spawn(move || {
+        x[1];
+    });
+}
+```
+
+编译报错如下：
+
+```
+error[E0277]: `std::rc::Rc<std::vec::Vec<i32>>` cannot be sent between threads safely
+   --> src/main.rs:133:5
+    |
+133 |     thread::spawn(move || {
+    |     ^^^^^^^^^^^^^ `std::rc::Rc<std::vec::Vec<i32>>` cannot be sent between threads safely
+    |
+```
+
+`Rc`是引用计数的智能指针，如果传递到另一个线程里面，会导致不同线程引用同一块数据，`Rc`内部并没有出现线程同步，这样肯定
+不是线程安全的，rust编译期间就阻止了这样的情况
+
+正确传递的例子
 
 ```rust
 fn test1() {
@@ -150,7 +198,7 @@ fn test1() {
 fn test2() {
     let mut x = String::from("a");
     // 移动x所有权到闭包中
-    // 不加move闭包是FnMut，不可变引用引起数据安全问题
+    // 不加move闭包是FnMut，可变引用引起数据安全问题
     // 添加move强制移动所有权，主线程不可访问变量x
     thread::spawn(move || x.push_str("b"));
 }
